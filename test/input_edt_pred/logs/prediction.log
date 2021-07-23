@@ -1,0 +1,54 @@
+
+Running Prediction
+
+Trained Model Dir: /data/akshayk/models/rbdb_3D-EDT_28-40hpi_90Kiters_overlapmodel
+Image Dir: /data/akshayk/28hpi/binned_to_36-36-60nm/tif_imgs/predictions/3View_5194245_bin10_inc10_bin-x1y1z1_imgs_rbdb_edt_predout/enhanced
+Models: 1fm,3fm,5fm
+Speed: 4
+GPU: all
+
+For model 1fm preprocessing Pkg001_Z01 1 of 2
+Running prediction on 1fm Pkg001_Z01
+Detected 2 GPU(s). Will run in parallel.
+
+real 82.03
+user 79.01
+sys 40.52
+For model 1fm preprocessing Pkg001_Z02 2 of 2
+Running prediction on 1fm Pkg001_Z02
+Detected 2 GPU(s). Will run in parallel.
+
+real 42.17
+user 42.37
+sys 22.85
+For model 3fm preprocessing Pkg001_Z01 1 of 2
+Running prediction on 3fm Pkg001_Z01
+Detected 2 GPU(s). Will run in parallel.
+
+real 99.16
+user 121.81
+sys 42.50
+For model 3fm preprocessing Pkg001_Z02 2 of 2
+Running prediction on 3fm Pkg001_Z02
+Detected 2 GPU(s). Will run in parallel.
+
+real 48.74
+user 54.16
+sys 24.26
+For model 5fm preprocessing Pkg001_Z01 1 of 2
+Running prediction on 5fm Pkg001_Z01
+Detected 2 GPU(s). Will run in parallel.
+
+real 106.59
+user 136.38
+sys 43.96
+For model 5fm preprocessing Pkg001_Z02 2 of 2
+Running prediction on 5fm Pkg001_Z02
+Detected 2 GPU(s). Will run in parallel.
+
+real 56.19
+user 68.16
+sys 25.21
+
+Prediction has completed.
+
