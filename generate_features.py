@@ -74,5 +74,5 @@ def generate_feature_table(input_stack, voxel_size=None, props=None, ret_fulldf=
         print(f"using voxel sizes given: X = {vx}, Y = {vy}, Z= {vz} ")
         final_df['volume_um3'] = final_df.area * (vx*vy*vz) * 1e-12
 
-    
+    final_df.rename(columns={'area': 'voxel_volume'}, inplace=True)
     return final_df
