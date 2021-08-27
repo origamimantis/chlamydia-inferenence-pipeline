@@ -81,7 +81,7 @@ def run_classifier(input_stack, classfier_path, output_path, voxel_size=None):
 
     rbdb_feature_df['prediction'] = pred_labels
 
-    Path(output_path).mkdir(parents=True, exist_ok=True)
+    Path(output_path).mkdir(parents=True,exist_ok=True)
 
     rbdb_feature_df.to_csv("{}/autoseg_detections_classfied.csv".format(output_path), index=False)
 
