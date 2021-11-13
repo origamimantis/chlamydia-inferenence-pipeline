@@ -2,4 +2,4 @@ __pycache__
 .DS_Store
 
 # large cnn model folders
-/models/cnn
+pipeline/models/*

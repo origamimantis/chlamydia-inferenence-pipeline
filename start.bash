@@ -1,47 +1,40 @@
-CONTAINERNAME=big
-
-function closecontainer()
-{
-  docker kill $CONTAINERNAME &>/dev/null
-  docker rm $CONTAINERNAME &>/dev/null
-}
-trap closecontainer SIGINT
-
-
 if [ $1 ] && [ $2 ]
 then
-  echo "Clearing out the output folder"
-  ./clr_out_dir.bash &>/dev/null
-  echo "...done"
 
-  echo "Removing existing containers"
-  closecontainer
-  echo "...done"
+  # docker run -v needs absolute paths
+  IN=$(realpath $1)
+  OUT=$(realpath $2)
 
-  echo "Creating a new container"
-  docker create --name $CONTAINERNAME -it \
-    -v $(pwd)/$1:/home/cdeep3m/mount/model \
-    -v $(pwd)/$2:/home/cdeep3m/mount/in \
-    -v $(pwd)/out:/home/cdeep3m/mount/out \
-    --network=host --gpus all \
-    --entrypoint /bin/bash \
-    ncmir/cdeep3m
-  docker start $CONTAINERNAME &>/dev/null
-  docker exec $CONTAINERNAME mkdir /home/cdeep3m/mount/out/logs/
-  docker exec $CONTAINERNAME touch /home/cdeep3m/mount/out/logs/prediction.log
-  docker exec $CONTAINERNAME touch /home/cdeep3m/mount/out/logs/preprocessing.log
-  docker exec $CONTAINERNAME touch /home/cdeep3m/mount/out/logs/postprocessing.log
-  echo "...done"
-  
-  echo "Running prediction"
-  docker exec $CONTAINERNAME tail -f \
-    mount/out/logs/prediction.log \
-    mount/out/logs/preprocessing.log \
-    mount/out/logs/postprocessing.log &
+  # if input folder doesn't exist, we got a problem
+  # if output folder doesn't exist, we can just make it automatically with docker run -v
+  if [ ! -f $IN ]
+  then
+    echo "Input file does not exist: $IN"
+    exit 1
+  fi
 
-  docker exec $CONTAINERNAME ./runprediction.sh \
-    /home/cdeep3m/mount/model/ /home/cdeep3m/mount/in /home/cdeep3m/mount/out
-  echo "...done"
+  if [ $3 ]
+  then
+    MASK=$(realpath $3)
+
+    # if msak file doesn't exist we panic and leave the script
+    if [ ! -f $MASK ]
+    then
+      echo "Mask file does not exist: $MASK"
+      exit 1
+    fi
+
+    docker run -it -v $IN:/input/input.mrc -v $OUT:/output -v $MASK:/mask/mask.mrc --gpus all zhange5-infp $UID
+
+  else
+    # the actual command. $UID is an argument so that ownership of the output folder can be transferred.
+    # the 4th arg decides if this skips all the prompts
+    docker run -it -v $IN:/input/input.mrc -v $OUT:/output --gpus all zhange5-infp $UID $4
+  fi
+
+
+
 else
-  echo ./start.bash model_dir input_dir
+  echo "./start.bash input_mrc output_dir [mask_mrc_file]"
+
 fi

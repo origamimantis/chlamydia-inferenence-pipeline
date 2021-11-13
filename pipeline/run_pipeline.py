@@ -52,6 +52,7 @@ def refine_pred_with_edt(input_stack, edt_stack, inc_mask_path=None, pred_t=None
     pred_final = pred - edt3d
 
     pred_final = np.uint8(pred_final > (PRED_THRESH))
+    pred_final = np.flip(pred_final, axis=1)
 
     if inc_mask_path:
         inc_mask = load_stack(inc_mask_path)
@@ -82,6 +83,9 @@ def run_classifier(input_stack, classfier_path, output_path, voxel_size=None):
     rbdb_feature_df['prediction'] = pred_labels
 
     Path(output_path).mkdir(parents=True,exist_ok=True)
+
+    with mrc.new(f'{output_path}/finalstack.mrc',overwrite=True) as the_file:
+        the_file.set_data(input_stack)
 
     rbdb_feature_df.to_csv("{}/autoseg_detections_classfied.csv".format(output_path), index=False)
 

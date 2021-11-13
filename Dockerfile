@@ -1,10 +1,12 @@
-
+# ncmir
 FROM ncmir/cdeep3m AS nc
 
+# python3.7 dependencies
 RUN apt update
 RUN apt install libssl-dev libncurses5-dev libsqlite3-dev libreadline-dev libtk8.6 libgdm-dev libdb4o-cil-dev libpcap-dev libffi-dev libbz2-dev \
 -y
 
+# install python3.7
 WORKDIR /python
 RUN wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
 RUN tar xvfz Python-3.7.9.tgz
@@ -14,30 +16,27 @@ RUN ./configure --prefix=/python
 RUN make && make install
 ENV PATH=$PATH:/python/bin
 
+# rbdb pipeline
 WORKDIR /pipeline
-COPY requirements.txt /pipeline/requirements.txt
+COPY pipeline/requirements.txt /pipeline/requirements.txt
 
-#RUN python3 -m venv $VIRTUAL_ENV
-
-#RUN . bin/activate
-
+# rbdb python dependencies
 RUN /python/bin/pip3 install --upgrade pip
 RUN /python/bin/pip3 install -r /pipeline/requirements.txt
 
-RUN apt update ##[edited]
+# more dependencies
+RUN apt update
 RUN apt install ffmpeg libsm6 libxext6 -y
 
-COPY . /pipeline
+# move files
+COPY pipeline /pipeline
+COPY pipeline_ebib /pipeline_ebib
+COPY timing /timing
 
+# set up starting point in docker
+WORKDIR /chlamydia_inf
+COPY docker_run.bash /chlamydia_inf
+COPY run_rbdb.bash /chlamydia_inf
+COPY run_ebib.bash /chlamydia_inf
 
-#FROM ncmir/cdeep3m AS nc
-#COPY --from=pyvenv /pipeline /pipeline
-#COPY --from=pyvenv /usr/local/lib /usr/local/lib
-#COPY --from=pyvenv /lib/x86_64-linux-gnu/libc.so.6 /lib/x86_64-linux-gnu/libc.so.6
-#COPY . /pipeline
-
-#WORKDIR /pipeline
-
-#RUN mkdir /images
-#RUN mkdir /images/nrml
-#RUN mkdir /images/edt
+ENTRYPOINT ["/chlamydia_inf/docker_run.bash"]
