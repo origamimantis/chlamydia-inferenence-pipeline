@@ -19,9 +19,6 @@ python3.7 get_obj.py
 # update csv with volume column
 python3.7 add_volume_col.py
 
-# this is the same thing but without volume
-rm /output/autoseg_detections_classfied.csv
-
 cd /output
 imodauto -E 128 labelled.mrc rb.mod
 imodauto -E 255 labelled.mrc db.mod
@@ -37,6 +34,7 @@ echo db $NUMDB >> rbdbcounts
 
 
 mkdir rbdb_pipeline_data
+mv autoseg_detections_classfied.csv rbdb_pipeline_data/
 mv labelled.mrc rbdb_pipeline_data/
 mv finalstack.mrc rbdb_pipeline_data/
 mv final.csv rbdb_pipeline_data/

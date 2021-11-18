@@ -66,6 +66,12 @@ python3.7 /timing/marktime.py /timing/tf
 TOT_TIME=$(python3.7 /timing/timediff.py /timing/t0 /timing/tf)
 echo $TOT_TIME > DONE
 
+mkdir results
+mv counts.txt results
+mv DONE results
+mv labels.mod results
+cp /input/input.mrc results
+
 echo "======================================"
 echo "======================================"
 echo "              all done!               "
