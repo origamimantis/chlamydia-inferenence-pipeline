@@ -30,8 +30,9 @@ ENV PATH=$PATH:/python/bin
 # install imod
 WORKDIR /imodinstall
 COPY install/imod_4.9.12_RHEL7-64_CUDA8.0.sh* /imodinstall/
+RUN ls
 RUN cat imod_4.9.12_RHEL7-64_CUDA8.0.sh* > imod_4.9.12_RHEL7-64_CUDA8.0.sh
-RUN rm imod_4.9.12_RHEL7-64_CUDA8.0.sh*
+RUN rm imod_4.9.12_RHEL7-64_CUDA8.0.sh?
 RUN chmod +x imod_4.9.12_RHEL7-64_CUDA8.0.sh
 RUN ./imod_4.9.12_RHEL7-64_CUDA8.0.sh -debian -y
 ENV IMOD_DIR=/usr/local/IMOD
